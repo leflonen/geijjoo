@@ -1,14 +1,14 @@
 import React from "react"
 const fetch = require("isomorphic-fetch");
-const { compose, withProps, withHandlers } = require("recompose");
+const { compose, withProps, withHandlers, withStateHandlers } = require("recompose");
 const demoFancyMapStyles = require("./demoFancyMapStyles.json");
-//const FaAnchor = require("react-icons/lib/fa/anchor");
+const FaAnchor = require("react-icons/lib/fa/anchor");
 const {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
   Marker,
-//  InfoWindow
+  InfoWindow
 } = require("react-google-maps");
 
 const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
@@ -20,6 +20,13 @@ const StyledMapWithAMarkerClusterer = compose(
     containerElement: <div style={{ height: `100vh` }} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
+  withStateHandlers(() => ({
+  isOpen: false,
+}), {
+  onToggleOpen: ({ isOpen }) => () => ({
+    isOpen: !isOpen,
+  })
+}),
   withHandlers({
     onMarkerClustererClick: () => (markerClusterer) => {
       const clickedMarkers = markerClusterer.getMarkers()
@@ -43,9 +50,13 @@ const StyledMapWithAMarkerClusterer = compose(
     >
       {props.markers.map(marker => (
         <Marker
+          onClick={props.onToggleOpen}
           key={marker.id}
           position={{ lat: parseFloat(marker.field_longitude), lng: parseFloat(marker.field_latitude) }}
         >
+        {props.isOpen && <InfoWindow onCloseClick={props.onToggleOpen}>
+          <FaAnchor />
+        </InfoWindow>}
       </Marker>
       ))}
     </MarkerClusterer>
