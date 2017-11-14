@@ -52,7 +52,7 @@ const StyledMapWithAMarkerClusterer = compose(
   </GoogleMap>
 );
 
-class DemoApp extends React.PureComponent {
+export default class App extends React.PureComponent {
   componentWillMount() {
     this.setState({ markers: [] })
   }
@@ -73,6 +73,3 @@ class DemoApp extends React.PureComponent {
     )
   }
 }
-// eslint-disable-next-line
-<DemoApp />
-export default DemoApp;
