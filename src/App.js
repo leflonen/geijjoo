@@ -1,6 +1,7 @@
 import React from "react"
 const fetch = require("isomorphic-fetch");
 const { compose, withProps, withHandlers } = require("recompose");
+const demoFancyMapStyles = require("./demoFancyMapStyles.json");
 //const FaAnchor = require("react-icons/lib/fa/anchor");
 const {
   withScriptjs,
@@ -12,7 +13,7 @@ const {
 
 const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 
-const MapWithAMarkerClusterer = compose(
+const StyledMapWithAMarkerClusterer = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBkBrkFqSna6gn9WzSNqDJT8K-DFot1Fzk&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
@@ -32,6 +33,7 @@ const MapWithAMarkerClusterer = compose(
   <GoogleMap
     defaultZoom={13}
     defaultCenter={{ lat: 61.49911, lng: 23.78712 }}
+    defaultOptions={{ styles: demoFancyMapStyles}}
   >
     <MarkerClusterer
       onClick={props.onMarkerClustererClick}
@@ -67,7 +69,7 @@ class DemoApp extends React.PureComponent {
 
   render() {
     return (
-      <MapWithAMarkerClusterer markers={this.state.markers} />
+      <StyledMapWithAMarkerClusterer markers={this.state.markers} />
     )
   }
 }
