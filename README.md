@@ -6,11 +6,9 @@ Project contains configuration and module for creating a webapp using [trafficli
 
 
 ## What it does
--Fetches data from [trafficlightradar API](https://github.com/Dropa/trafficlightradar_api)
-
--Places markers on map from the fetched geodata
-
--You can click each marker to open an infowindow
+- Fetches data from [trafficlightradar API](https://github.com/Dropa/trafficlightradar_api)
+- Places markers on map from the fetched geodata
+- You can click each marker to open an infowindow
 
 See remaining tasks on [issue list](https://github.com/leflonen/geijjoo/issues)
 
