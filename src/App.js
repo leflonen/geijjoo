@@ -4,7 +4,7 @@ const {
     compose,
     withProps,
     withHandlers,
-   // withStateHandlers
+    withStateHandlers
 } = require("recompose");
 const FaAnchor = require("react-icons/lib/fa/anchor");
 const {
@@ -18,6 +18,30 @@ const {
 
 const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 
+const MyMarker = compose(
+    withStateHandlers(() => ({
+        isOpen: false,
+    }), {
+        onToggleOpen: ({isOpen}) => () => ({
+            isOpen: !isOpen,
+        })
+    }),
+)(props =>
+    <Marker
+        //onClick={props.onToggleOpen}   // This opens up every marker
+        onClick={() => props.onToggleOpen(props.marker)}  // This does nothing(?)
+        key={props.marker.id}
+        position={{ lat: parseFloat(props.marker.field_longitude), lng: parseFloat(props.marker.field_latitude) }}
+    >
+        {props.isOpen && <InfoWindow
+            //onCloseClick={props.onToggleOpen} // same as above
+            onCloseClick={() => props.onToggleOpen}
+        >
+            <FaAnchor />
+        </InfoWindow>}
+    </Marker>
+);
+
 const StyledMapWithAMarkerClusterer = compose(
     withProps({
         googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBkBrkFqSna6gn9WzSNqDJT8K-DFot1Fzk&v=3.exp&libraries=geometry,drawing,places",
@@ -25,13 +49,7 @@ const StyledMapWithAMarkerClusterer = compose(
         containerElement: <div style={{ height: `100vh` }} />,
         mapElement: <div style={{ height: `100%` }} />,
     }),
-    // withStateHandlers(() => ({
-    //     isOpen: false,
-    // }), {
-    //     onToggleOpen: ({isOpen}) => () => ({
-    //         isOpen: !isOpen,
-    //     })
-    // }),
+
     withHandlers({
         onMarkerClustererClick: () => (markerClusterer) => {
         },
@@ -53,19 +71,7 @@ const StyledMapWithAMarkerClusterer = compose(
             gridSize={60}
         >
             {props.markers.map(marker => (
-                <Marker
-                    //onClick={props.onToggleOpen}   // This opens up every marker
-                    onClick={() => props.onToggleOpen(marker)}  // This does nothing(?)
-                    key={marker.id}
-                    position={{ lat: parseFloat(marker.field_longitude), lng: parseFloat(marker.field_latitude) }}
-                >
-                    {props.isOpen && <InfoWindow
-                        //onCloseClick={props.onToggleOpen} // same as above
-                        onCloseClick={() => props.onToggleOpen}
-                    >
-                        <FaAnchor />
-                    </InfoWindow>}
-                </Marker>
+                <MyMarker marker={marker} />
             ))}
         </MarkerClusterer>
         <TrafficLayer autoUpdate />
